@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สิทธิมนุษยชน 30 ประการ - UDHR</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0F172A',
+                            light: '#1E3E62'
+                        },
+                        accent: {
+                            DEFAULT: '#F59E0B',
+                            light: '#F4CE14'
+                        },
+                        base: {
+                            white: '#FFFFFF',
+                            gray: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #F8FAFC;
+        }
+        
+        /* Custom scrollbar for aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F8FAFC;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .modal-enter {
+            animation: modalFadeIn 0.3s ease-out forwards;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const udhrData = [
+            {
+                id: 1,
+                articleNumber: 1,
+                title: "เราทุกคนเกิดมาเป็นอิสระและเท่าเทียมกัน",
+                description: "มนุษย์ทุกคนเกิดมามีอิสระและเสมอภาคกันในศักดิ์ศรีและสิทธิ ต่างในตนมีเหตุผลและมโนธรรม และควรปฏิบัติต่อกันด้วยเจตนารมณ์แห่งภราดรภาพ",
+                caseStudy: "กรณีที่นักเรียนกลุ่มหนึ่งถูกกีดกันไม่ให้เข้าร่วมกิจกรรมของโรงเรียนเพียงเพราะพวกเขามีความหลากหลายทางเพศ (LGBTQ+) เป็นการละเมิดสิทธิขั้นพื้นฐานแห่งความเท่าเทียม"
+            },
+            {
+                id: 2,
+                articleNumber: 2,
+                title: "สิทธิความเสมอภาคและไม่เลือกปฏิบัติ",
+                description: "ทุกคนย่อมมีสิทธิและอิสรภาพโดยปราศจากการแบ่งแยกใดๆ เช่น เชื้อชาติ สีผิว เพศ ภาษา ศาสนา ความคิดเห็นทางการเมือง เผ่าพันธุ์ หรือฐานะทางสังคม",
+                caseStudy: "นายสมชายถูกปฏิเสธการเข้าทำงานในบริษัทแห่งหนึ่ง โดยฝ่ายบุคคลแจ้งเหตุผลว่าเขามาจากภูมิภาคที่บริษัทมีอคติด้วย ถือเป็นการเลือกปฏิบัติอย่างชัดเจน"
+            },
+            {
+                id: 3,
+                articleNumber: 3,
+                title: "สิทธิในการมีชีวิต",
+                description: "ทุกคนมีสิทธิในการมีชีวิต เสรีภาพ และความมั่นคงแห่งบุคคล",
+                caseStudy: "การวิสามัญฆาตกรรมผู้ต้องสงสัยโดยเจ้าหน้าที่รัฐโดยไม่ผ่านกระบวนการยุติธรรม เป็นการพรากสิทธิในการมีชีวิตซึ่งเป็นสิทธิที่ไม่อาจละเมิดได้"
+            },
+            {
+                id: 4,
+                articleNumber: 4,
+                title: "ห้ามการตกเป็นทาส",
+                description: "บุคคลใดจะถูกยึดเป็นทาสหรือต้องรับใช้เยี่ยงทาสไม่ได้ การค้าทาสทุกรูปแบบเป็นสิ่งต้องห้าม",
+                caseStudy: "แรงงานข้ามชาติถูกยึดหนังสือเดินทางและบังคับให้ทำงานบนเรือประมงโดยไม่ได้ค่าจ้างและไม่สามารถหลบหนีได้ นี่คือการใช้แรงงานทาสยุคใหม่"
+            },
+            {
+                id: 5,
+                articleNumber: 5,
+                title: "ห้ามการทรมาน",
+                description: "บุคคลใดจะถูกทรมาน หรือได้รับการปฏิบัติ หรือการลงโทษที่โหดร้าย ไร้มนุษยธรรม หรือย่ำยีศักดิ์ศรีไม่ได้",
+                caseStudy: "ผู้ต้องขังถูกเจ้าหน้าที่สอบสวนใช้ถุงดำคลุมหัวและทำร้ายร่างกายเพื่อให้รับสารภาพ เป็นการทรมานที่ผิดหลักสิทธิมนุษยชนสากล"
+            },
+            {
+                id: 6,
+                articleNumber: 6,
+                title: "สิทธิในการได้รับการรับรองทางกฎหมาย",
+                description: "ทุกคนมีสิทธิที่จะได้รับการยอมรับว่าเป็นบุคคลตามกฎหมายไม่ว่าที่ใด",
+                caseStudy: "เด็กไร้สัญชาติที่เกิดในพื้นที่ชายแดนไม่ได้รับใบเกิด ทำให้ไม่มีสิทธิเข้าเรียนในโรงเรียนรัฐหรือรับการรักษาพยาบาลตามสิทธิบัตรทอง"
+            },
+            {
+                id: 7,
+                articleNumber: 7,
+                title: "ความเท่าเทียมกันหน้ากฎหมาย",
+                description: "ทุกคนเสมอภาคกันตามกฎหมายและมีสิทธิที่จะได้รับความคุ้มครองของกฎหมายอย่างเท่าเทียมกันโดยปราศจากการเลือกปฏิบัติ",
+                caseStudy: "คนรวยที่ทำผิดกฎหมายจราจรได้รับการปล่อยตัวโดยไม่ถูกปรับ ในขณะที่คนจนทำผิดลักษณะเดียวกันกลับถูกดำเนินคดีอย่างเด็ดขาด สะท้อนถึงความไม่เท่าเทียมทางกฎหมาย"
+            },
+            {
+                id: 8,
+                articleNumber: 8,
+                title: "สิทธิได้รับการเยียวยา",
+                description: "ทุกคนมีสิทธิที่จะได้รับการเยียวยาอย่างมีผลจากศาลที่มีอำนาจ เมื่อสิทธิขั้นพื้นฐานของตนถูกละเมิด",
+                caseStudy: "ชาวบ้านที่ถูกเวนคืนที่ดินโดยไม่เป็นธรรมเพื่อสร้างโครงการรัฐ ไม่สามารถหาช่องทางเรียกร้องค่าชดเชยจากศาลปกครองได้ ถือเป็นการละเมิดสิทธินี้"
+            },
+            {
+                id: 9,
+                articleNumber: 9,
+                title: "ห้ามการจับกุมโดยพลการ",
+                description: "บุคคลใดจะถูกจับกุม กักขัง หรือเนรเทศตามอำเภอใจไม่ได้",
+                caseStudy: "นักกิจกรรมทางการเมืองถูกกลุ่มคนนอกเครื่องแบบอุ้มตัวขึ้นรถตู้หายไปโดยไม่มีหมายจับหรือการแจ้งข้อกล่าวหา"
+            },
+            {
+                id: 10,
+                articleNumber: 10,
+                title: "สิทธิในการพิจารณาคดีที่เป็นธรรม",
+                description: "ทุกคนมีสิทธิอย่างเท่าเทียมกันที่จะได้รับการพิจารณาคดีอย่างเปิดเผยและเป็นธรรมโดยศาลที่เป็นอิสระและเป็นกลาง",
+                caseStudy: "ศาลสั่งพิจารณาคดีลับในข้อหาทั่วไป และไม่อนุญาตให้ทนายความของจำเลยเข้าฟังการสืบพยาน ทำให้กระบวนการยุติธรรมขาดความโปร่งใส"
+            },
+            { id: 11, articleNumber: 11, title: "บริสุทธิ์จนกว่าจะพิสูจน์ได้ว่าผิด", description: "ทุกคนที่ถูกกล่าวหาว่ากระทำผิดอาญา มีสิทธิที่จะได้รับการสันนิษฐานไว้ก่อนว่าบริสุทธิ์จนกว่าจะพิสูจน์ได้ว่ามีความผิด", caseStudy: "สื่อมวลชนพาดหัวข่าวตัดสินประณามผู้ต้องสงสัยว่าเป็น 'ฆาตกร' ตั้งแต่ยังไม่มีการสืบสวนและศาลยังไม่ได้ตัดสิน" },
+            { id: 12, articleNumber: 12, title: "สิทธิในความเป็นส่วนตัว", description: "บุคคลใดจะถูกแทรกแซงตามอำเภอใจในความเป็นส่วนตัว ครอบครัว เคหสถาน หรือการสื่อสารไม่ได้", caseStudy: "บริษัทแอปพลิเคชันนำข้อมูลตำแหน่งและประวัติการสนทนาส่วนตัวของผู้ใช้ไปขายให้บริษัทโฆษณาโดยไม่ได้รับอนุญาต" },
+            { id: 13, articleNumber: 13, title: "เสรีภาพในการเดินทาง", description: "ทุกคนมีเสรีภาพในการเคลื่อนย้ายและอยู่อาศัยภายในพรมแดนของแต่ละรัฐ และมีสิทธิที่จะออกและกลับเข้าประเทศตน", caseStudy: "รัฐบาลออกคำสั่งห้ามประชาชนจากจังหวัดหนึ่งเดินทางเข้าเมืองหลวงเพื่อร่วมกิจกรรมสาธารณะโดยไม่มีเหตุผลด้านความมั่นคงที่ชัดเจน" },
+            { id: 14, articleNumber: 14, title: "สิทธิในการลี้ภัย", description: "ทุกคนมีสิทธิที่จะแสวงหาและได้ที่ลี้ภัยในประเทศอื่นจากการประหัตประหาร", caseStudy: "ผู้ลี้ภัยสงครามที่ข้ามพรมแดนมาเพื่อขอความช่วยเหลือ ถูกผลักดันกลับสู่พื้นที่สู้รบทันทีโดยไม่ได้รับการประเมินสถานะ" },
+            { id: 15, articleNumber: 15, title: "สิทธิในสัญชาติ", description: "ทุกคนมีสิทธิในการมีสัญชาติ บุคคลใดจะถูกลิดรอนสัญชาติของตนตามอำเภอใจไม่ได้", caseStudy: "ชนพื้นเมืองที่อาศัยอยู่ในป่าลึกมาหลายชั่วอายุคน ถูกรัฐปฏิเสธการให้บัตรประชาชนและสัญชาติ ทำให้กลายเป็นคนเถื่อน" },
+            { id: 16, articleNumber: 16, title: "สิทธิในการแต่งงานและครอบครัว", description: "ชายและหญิงที่บรรลุนิติภาวะแล้ว มีสิทธิที่จะแต่งงานและสร้างครอบครัวโดยปราศจากการจำกัดเรื่องเชื้อชาติ สัญชาติ หรือศาสนา", caseStudy: "กฎหมายในบางประเทศไม่อนุญาตให้คู่รักต่างศาสนาจดทะเบียนสมรสกันได้ หากอีกฝ่ายไม่เปลี่ยนศาสนาเสียก่อน" },
+            { id: 17, articleNumber: 17, title: "สิทธิในทรัพย์สิน", description: "ทุกคนมีสิทธิในการเป็นเจ้าของทรัพย์สิน และจะถูกยึดทรัพย์ไปโดยพลการไม่ได้", caseStudy: "นายทุนร่วมมือกับเจ้าหน้าที่รัฐ ขับไล่ชุมชนดั้งเดิมออกจากพื้นที่และยึดที่ดินของพวกเขามาสร้างรีสอร์ท" },
+            { id: 18, articleNumber: 18, title: "เสรีภาพทางความคิดและศาสนา", description: "ทุกคนมีเสรีภาพทางความคิด มโนธรรม และศาสนา สิทธิที่จะเปลี่ยนศาสนาหรือความเชื่อ และสิทธิในการแสดงออกทางศาสนา", caseStudy: "พนักงานบริษัทถูกบีบบังคับให้เข้าร่วมพิธีกรรมทางศาสนาที่ขัดต่อความเชื่อส่วนบุคคลของตน หากไม่เข้าร่วมจะถูกหักเงินเดือน" },
+            { id: 19, articleNumber: 19, title: "เสรีภาพในการแสดงออก", description: "ทุกคนมีเสรีภาพในการแสดงความคิดเห็นและการแสดงออก ซึ่งรวมถึงการถือครองความเห็นโดยปราศจากการแทรกแซง", caseStudy: "นักศึกษาถูกตั้งข้อหาร้ายแรงเพียงเพราะเขียนบทความวิจารณ์นโยบายเศรษฐกิจของรัฐบาลอย่างสันติ" },
+            { id: 20, articleNumber: 20, title: "เสรีภาพในการชุมนุม", description: "ทุกคนมีเสรีภาพในการชุมนุมและการสมาคมอย่างสันติ", caseStudy: "ตำรวจใช้รถฉีดน้ำแรงดันสูงและแก๊สน้ำตา สลายการชุมนุมของกลุ่มชาวบ้านที่มานั่งประท้วงเรียกร้องปัญหาราคาสินค้าเกษตรตกต่ำอย่างสงบ" },
+            { id: 21, articleNumber: 21, title: "สิทธิในการมีส่วนร่วมทางการเมือง", description: "ทุกคนมีสิทธิที่จะมีส่วนร่วมในรัฐบาลของประเทศตน ไม่ว่าโดยตรงหรือผ่านผู้แทนที่เลือกตั้งมาอย่างเสรี", caseStudy: "การตัดสิทธิผู้มีสิทธิเลือกตั้งจำนวนมากโดยพลการ เพื่อเอื้อประโยชน์ให้พรรคการเมืองฝ่ายรัฐบาลชนะการเลือกตั้ง" },
+            { id: 22, articleNumber: 22, title: "สิทธิในความมั่นคงทางสังคม", description: "ทุกคนในฐานะสมาชิกของสังคม มีสิทธิในความมั่นคงทางสังคม และการทำให้บรรลุถึงสิทธิทางเศรษฐกิจ สังคม และวัฒนธรรม", caseStudy: "ผู้สูงอายุที่ยากไร้ไม่ได้รับเบี้ยยังชีพหรือสวัสดิการใดๆ จากรัฐ ทำให้ต้องใช้ชีวิตอย่างยากลำบากไร้หลักประกันในบั้นปลายชีวิต" },
+            { id: 23, articleNumber: 23, title: "สิทธิในการทำงาน", description: "ทุกคนมีสิทธิในการทำงาน การเลือกงานอย่างเสรี สภาพการทำงานที่ยุติธรรม และการคุ้มครองจากการว่างงาน และได้ค่าจ้างเท่าเทียม", caseStudy: "พนักงานหญิงได้รับเงินเดือนน้อยกว่าพนักงานชายในตำแหน่งและความรับผิดชอบที่เท่าเทียมกันอย่างสิ้นเชิง" },
+            { id: 24, articleNumber: 24, title: "สิทธิในการพักผ่อน", description: "ทุกคนมีสิทธิในการพักผ่อนและเวลาว่าง รวมถึงการจำกัดเวลาทำงานที่สมเหตุสมผลและวันหยุดที่ได้รับค่าจ้าง", caseStudy: "นายจ้างบังคับให้พนักงานทำงานล่วงเวลาติดต่อกันเป็นเดือนโดยไม่มีวันหยุด หากปฏิเสธจะถูกขู่ไล่ออก" },
+            { id: 25, articleNumber: 25, title: "มาตรฐานการครองชีพที่เพียงพอ", description: "ทุกคนมีสิทธิในมาตรฐานการครองชีพที่เพียงพอสำหรับสุขภาพและความเป็นอยู่ดีของตนและครอบครัว รวมถึงอาหาร เสื้อผ้า ที่อยู่อาศัย", caseStudy: "คนไร้บ้านจำนวนมากต้องนอนใต้สะพานในสภาพแวดล้อมที่เต็มไปด้วยโรคระบาด โดยที่รัฐไม่มีการจัดหาศูนย์พักพิงหรือที่อยู่อาศัยที่เหมาะสมให้" },
+            { id: 26, articleNumber: 26, title: "สิทธิในการศึกษา", description: "ทุกคนมีสิทธิในการศึกษา การศึกษาอย่างน้อยในขั้นประถมและขั้นพื้นฐานต้องให้เปล่า (ฟรี) และเป็นการบังคับ", caseStudy: "เด็กในพื้นที่ห่างไกลต้องออกจากโรงเรียนกลางคันเพราะไม่มีเงินจ่ายค่าบำรุงการศึกษาและค่าชุดนักเรียนที่โรงเรียนรัฐเรียกเก็บเพิ่มเติม" },
+            { id: 27, articleNumber: 27, title: "สิทธิในวัฒนธรรมและลิขสิทธิ์", description: "ทุกคนมีสิทธิที่จะเข้าร่วมในชีวิตทางวัฒนธรรมของชุมชนอย่างเสรี และมีสิทธิได้รับการคุ้มครองผลประโยชน์ทางศีลธรรมและวัตถุจากการประดิษฐ์", caseStudy: "ผลงานเพลงพื้นบ้านของศิลปินท้องถิ่นถูกค่ายเพลงใหญ่นำไปจดลิขสิทธิ์หาประโยชน์โดยไม่ให้เครดิตและส่วนแบ่งใดๆ แก่ผู้สร้างสรรค์เดิม" },
+            { id: 28, articleNumber: 28, title: "โลกที่ยุติธรรมและเสรี", description: "ทุกคนมีสิทธิในระเบียบทางสังคมและระหว่างประเทศ ซึ่งสิทธิและเสรีภาพตามปฏิญญานี้จะสามารถบรรลุผลได้อย่างเต็มที่", caseStudy: "ประเทศมหาอำนาจใช้อิทธิพลทางเศรษฐกิจบีบบังคับประเทศเล็กๆ ให้ยอมรับนโยบายที่ละเมิดสิทธิมนุษยชนของประชาชนในประเทศนั้น" },
+            { id: 29, articleNumber: 29, title: "ความรับผิดชอบต่อสังคม", description: "ทุกคนมีหน้าที่ต่อชุมชน ซึ่งเป็นที่เดียวที่การพัฒนาบุคลิกภาพของตนอย่างเสรีและเต็มที่สามารถเกิดขึ้นได้", caseStudy: "บุคคลใช้เสรีภาพในการแสดงออกของตนในการเผยแพร่ถ้อยคำเกลียดชัง (Hate speech) ที่ยุยงให้เกิดความรุนแรงต่อชนกลุ่มน้อย ซึ่งขัดต่อหน้าที่ที่ต้องเคารพสิทธิผู้อื่น" },
+            { id: 30, articleNumber: 30, title: "ไม่มีใครพรากสิทธิเหล่านี้ไปได้", description: "ไม่มีบทบัญญัติใดในปฏิญญานี้ที่อาจตีความได้ว่าเป็นการให้สิทธิใดๆ แก่รัฐ กลุ่มคน หรือบุคคลใดในการกระทำที่มุ่งทำลายสิทธิและเสรีภาพเหล่านี้", caseStudy: "รัฐบาลผ่านกฎหมายพิเศษเพื่อยกเว้นการคุ้มครองสิทธิมนุษยชนบางประการโดยอ้างความมั่นคงของชาติอย่างถาวร ซึ่งเป็นการบ่อนทำลายหลักการสากลทั้งหมด" }
+        ];
+
+        const SearchIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        );
+
+        const BookIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+        );
+
+        const CloseIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        );
+
+        const ScaleIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+                <path d="M7 21h10"></path>
+                <path d="M12 3v18"></path>
+                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+            </svg>
+        )
+
+        const SparklesIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+            </svg>
+        );
+
+        const LightbulbIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>
+            </svg>
+        );
+
+        const LoaderIcon = () => (
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        );
+
+        const ArticleCard = ({ article, onClick }) => {
+            return (
+                <div 
+                    onClick={() => onClick(article)}
+                    className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-transparent hover:border-accent p-6 cursor-pointer flex flex-col h-full group"
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="bg-navy-light text-white text-xs font-semibold px-3 py-1 rounded-full">
+                            ข้อที่ {article.articleNumber}
+                        </span>
+                        <div className="opacity-50 group-hover:opacity-100 transition-opacity transform group-hover:scale-110 duration-300">
+                            <BookIcon />
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-navy mb-2 flex-grow">
+                        {article.title}
+                    </h3>
+                    <p className="text-sm text-slate-500 line-clamp-2 mt-auto">
+                        {article.description}
+                    </p>
+                </div>
+            );
+        };
+
+        const ArticleModal = ({ article, onClose }) => {
+            if (!article) return null;
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-navy/60 backdrop-blur-sm transition-opacity" 
+                        onClick={onClose}
+                    ></div>
+                    
+                    {/* Modal Content */}
+                    <div className="relative bg-base-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col modal-enter">
+                        {/* Header */}
+                        <div className="bg-navy text-white px-6 py-5 flex items-center justify-between shrink-0">
+                            <div>
+                                <span className="text-accent font-medium text-sm mb-1 block tracking-wider">
+                                    ARTICLE {article.articleNumber}
+                                </span>
+                                <h2 className="text-xl sm:text-2xl font-bold">
+                                    {article.title}
+                                </h2>
+                            </div>
+                            <button 
+                                onClick={onClose}
+                                className="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors"
+                            >
+                                <CloseIcon />
+                            </button>
+                        </div>
+                        
+                        {/* Body (Scrollable) */}
+                        <div className="p-6 overflow-y-auto flex-grow text-slate-700 space-y-6">
+                            
+                            <div>
+                                <h4 className="text-navy font-semibold text-lg mb-2 flex items-center gap-2">
+                                    <BookIcon /> คำอธิบายสิทธิ
+                                </h4>
+                                <p className="leading-relaxed">
+                                    {article.description}
+                                </p>
+                            </div>
+
+                            {/* Case Study Box */}
+                            <div className="bg-amber-50/50 border-l-4 border-accent rounded-r-xl p-5 shadow-sm">
+                                <h4 className="text-accent-light text-amber-600 font-semibold mb-2 flex items-center gap-2">
+                                    <ScaleIcon /> กรณีศึกษา (ตัวอย่างการละเมิดสิทธิ)
+                                </h4>
+                                <p className="text-slate-800 leading-relaxed text-sm sm:text-base italic">
+                                    "{article.caseStudy}"
+                                </p>
+                            </div>
+                            
+                        </div>
+                        
+                        {/* Footer */}
+                        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end shrink-0">
+                            <button 
+                                onClick={onClose}
+                                className="px-6 py-2 bg-navy text-white rounded-lg hover:bg-navy-light transition-colors font-medium shadow-sm"
+                            >
+                                ปิดหน้าต่าง
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const SituationAnalyzer = ({ udhrData, onArticleClick }) => {
+            const [text, setText] = React.useState('');
+            const [isAnalyzing, setIsAnalyzing] = React.useState(false);
+            const [result, setResult] = React.useState(null);
+            const [error, setError] = React.useState('');
+
+            const handleAnalyze = async () => {
+                if (!text.trim()) {
+                    setError('กรุณาพิมพ์เล่าสถานการณ์ของคุณก่อนทำการวิเคราะห์');
+                    return;
+                }
+
+                setIsAnalyzing(true);
+                setError('');
+                setResult(null);
+
+                try {
+                    // Call Gemini API to analyze the situation
+                    const apiKey = "AQ.Ab8RN6LocMcGA68GNMzWY9yf8lKL6VeRm64FU5xXB4f4l4XePw"; // API key will be auto-injected by Canvas
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                    const payload = {
+                        contents: [{ parts: [{ text: text }] }],
+                        systemInstruction: {
+                            parts: [{ text: "คุณคือผู้เชี่ยวชาญด้านกฎหมายและสิทธิมนุษยชน (UDHR) จงวิเคราะห์สถานการณ์ที่ผู้ใช้ให้มา และระบุว่ามีการละเมิดสิทธิมนุษยชนข้อใดใน 30 ข้อบ้าง พร้อมให้คำแนะนำเบื้องต้นที่เป็นประโยชน์ว่าควรทำอย่างไรต่อไป (เช่น หน่วยงานที่ติดต่อ หรือวิธีจัดการ)" }]
+                        },
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "OBJECT",
+                                properties: {
+                                    violatedArticles: {
+                                        type: "ARRAY",
+                                        items: { type: "INTEGER" },
+                                        description: "หมายเลขข้อของ UDHR (1-30) ที่คาดว่าถูกละเมิด (ใส่เป็นอาร์เรย์ตัวเลข)"
+                                    },
+                                    analysis: {
+                                        type: "STRING",
+                                        description: "คำอธิบายสั้นๆ ว่าสถานการณ์นี้เข้าข่ายละเมิดสิทธิข้อดังกล่าวอย่างไร"
+                                    },
+                                    advice: {
+                                        type: "STRING",
+                                        description: "คำแนะนำที่นำไปปฏิบัติได้จริง ว่าผู้ใช้ควรทำอย่างไรต่อไป หรือควรติดต่อหน่วยงานใด"
+                                    }
+                                },
+                                required: ["violatedArticles", "analysis", "advice"]
+                            }
+                        }
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const apiResult = await response.json();
+                    
+                    if (apiResult.candidates && apiResult.candidates.length > 0) {
+                        const jsonText = apiResult.candidates[0].content.parts[0].text;
+                        const parsedResult = JSON.parse(jsonText);
+                        setResult(parsedResult);
+                    } else {
+                        throw new Error('ไม่สามารถวิเคราะห์ข้อมูลได้ในขณะนี้');
+                    }
+                } catch (err) {
+                    console.error("Analysis error:", err);
+                    setError('เกิดข้อผิดพลาดในการวิเคราะห์ กรุณาลองใหม่อีกครั้ง');
+                } finally {
+                    setIsAnalyzing(false);
+                }
+            };
+
+            const matchedArticles = result?.violatedArticles
+                ? result.violatedArticles.map(num => udhrData.find(a => a.articleNumber === num)).filter(Boolean)
+                : [];
+
+            return (
+                <div className="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 mb-12 relative overflow-hidden">
+                    {/* Decorative Header */}
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="bg-accent/20 text-accent-light p-3 rounded-full">
+                            <SparklesIcon />
+                        </div>
+                        <div>
+                            <h2 className="text-xl sm:text-2xl font-bold text-navy">วิเคราะห์การละเมิดสิทธิด้วย AI</h2>
+                            <p className="text-sm text-slate-500 mt-1">พิมพ์เล่าเหตุการณ์ที่คุณหรือคนรู้จักพบเจอ เพื่อตรวจสอบว่าเข้าข่ายละเมิดสิทธิมนุษยชนข้อใด</p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 relative z-10">
+                        <textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            placeholder="ตัวอย่าง: ฉันถูกเจ้านายบังคับให้ทำงานล่วงเวลาทุกวันโดยไม่ได้ค่าล่วงเวลา และขู่ว่าจะไล่ออกถ้าไม่ทำตาม..."
+                            className="w-full min-h-[120px] p-4 rounded-xl border border-slate-300 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 resize-y bg-slate-50 text-slate-700"
+                        />
+                        
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleAnalyze}
+                                disabled={isAnalyzing || !text.trim()}
+                                className="flex items-center px-6 py-3 bg-navy text-white font-medium rounded-xl hover:bg-navy-light transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                            >
+                                {isAnalyzing ? (
+                                    <><LoaderIcon /> กำลังวิเคราะห์...</>
+                                ) : (
+                                    <><SparklesIcon /> &nbsp; วิเคราะห์สถานการณ์</>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Results Area */}
+                    {result && (
+                        <div className="mt-8 pt-8 border-t border-slate-200 modal-enter">
+                            <h3 className="text-lg font-semibold text-navy mb-4">ผลการวิเคราะห์</h3>
+                            
+                            <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 mb-6 text-slate-700">
+                                <p className="leading-relaxed">{result.analysis}</p>
+                            </div>
+
+                            <div className="bg-amber-50 p-5 rounded-xl border border-amber-200 mb-6">
+                                <h4 className="flex items-center gap-2 font-semibold text-amber-700 mb-2">
+                                    <LightbulbIcon /> คำแนะนำสำหรับคุณ
+                                </h4>
+                                <p className="text-amber-900 leading-relaxed text-sm sm:text-base">
+                                    {result.advice}
+                                </p>
+                            </div>
+
+                            {matchedArticles.length > 0 && (
+                                <div>
+                                    <h4 className="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wider">สิทธิที่อาจถูกละเมิด ({matchedArticles.length} ข้อ)</h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {matchedArticles.map((article) => (
+                                            <div 
+                                                key={article.id}
+                                                onClick={() => onArticleClick(article)}
+                                                className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:border-accent hover:shadow-md cursor-pointer transition-all flex flex-col"
+                                            >
+                                                <span className="text-xs font-bold text-accent mb-1">ข้อที่ {article.articleNumber}</span>
+                                                <h5 className="font-semibold text-navy text-sm mb-2">{article.title}</h5>
+                                                <p className="text-xs text-slate-500 line-clamp-2 mt-auto">{article.description}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {matchedArticles.length === 0 && (
+                                <p className="text-slate-500 italic text-center p-4 bg-slate-50 rounded-lg">ไม่พบข้อบัญญัติที่ตรงกับการละเมิดสิทธิอย่างชัดเจนจากข้อมูลที่คุณให้มา</p>
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [searchQuery, setSearchQuery] = React.useState("");
+            const [selectedArticle, setSelectedArticle] = React.useState(null);
+
+            // Filter data based on search input (checks title, description, or number)
+            const filteredData = React.useMemo(() => {
+                if (!searchQuery.trim()) return udhrData;
+                const lowerQuery = searchQuery.toLowerCase();
+                return udhrData.filter(article => 
+                    article.title.toLowerCase().includes(lowerQuery) || 
+                    article.articleNumber.toString().includes(lowerQuery) ||
+                    article.description.toLowerCase().includes(lowerQuery)
+                );
+            }, [searchQuery]);
+
+            // Prevent body scroll when modal is open
+            React.useEffect(() => {
+                if (selectedArticle) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'unset';
+                }
+                return () => { document.body.style.overflow = 'unset'; }
+            }, [selectedArticle]);
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    {/* Hero Section */}
+                    <header className="bg-navy py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+                        {/* Decorative background element */}
+                        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+                            <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
+                            <div className="absolute top-1/2 -left-24 w-64 h-64 bg-blue-400 rounded-full blur-3xl"></div>
+                        </div>
+
+                        <div className="max-w-4xl mx-auto text-center relative z-10">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+                                สิทธิมนุษยชน <span className="text-accent">30 ประการ</span>
+                            </h1>
+                            <p className="text-slate-300 text-base sm:text-lg mb-10 max-w-2xl mx-auto">
+                                สรุปความรู้และกรณีศึกษาตามปฏิญญาสากลว่าด้วยสิทธิมนุษยชน (Universal Declaration of Human Rights - UDHR) เพื่อความเข้าใจในสิทธิขั้นพื้นฐานของทุกคน
+                            </p>
+                            
+                            {/* Search Bar */}
+                            <div className="relative max-w-xl mx-auto">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                                    <SearchIcon />
+                                </div>
+                                <input 
+                                    type="text" 
+                                    placeholder="ค้นหาสิทธิด้วยคำค้นหา หรือ ข้อที่..." 
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="block w-full pl-12 pr-4 py-4 rounded-full bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-accent/30 shadow-lg transition-shadow text-sm sm:text-base"
+                                />
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Content Area */}
+                    <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+                        
+                        {}
+                        <SituationAnalyzer udhrData={udhrData} onArticleClick={setSelectedArticle} />
+
+                        {/* Search Results Summary */}
+                        {searchQuery && (
+                            <div className="mb-6 text-slate-600 font-medium text-center sm:text-left">
+                                พบผลลัพธ์ {filteredData.length} รายการ สำหรับการค้นหา "{searchQuery}"
+                            </div>
+                        )}
+
+                        {/* Grid */}
+                        {filteredData.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {filteredData.map((article) => (
+                                    <ArticleCard 
+                                        key={article.id} 
+                                        article={article} 
+                                        onClick={setSelectedArticle}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-20">
+                                <div className="inline-block p-4 bg-white rounded-full shadow-sm mb-4 text-slate-400">
+                                    <SearchIcon />
+                                </div>
+                                <h3 className="text-xl font-medium text-slate-700 mb-2">ไม่พบข้อมูลที่ค้นหา</h3>
+                                <p className="text-slate-500">ลองใช้คำค้นหาอื่น หรือค้นหาจากหมายเลขข้อ 1-30</p>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Footer */}
+                    <footer className="bg-slate-900 py-8 text-center text-slate-400 text-sm">
+                        <p>© {new Date().getFullYear()} โครงการเรียนรู้สิทธิมนุษยชน (UDHR Educational Portal)</p>
+                        <p className="mt-1">ออกแบบเพื่อส่งเสริมความรู้และความตระหนักในสิทธิมนุษยชนสากล</p>
+                    </footer>
+
+                    {/* Modal */}
+                    <ArticleModal 
+                        article={selectedArticle} 
+                        onClose={() => setSelectedArticle(null)} 
+                    />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
