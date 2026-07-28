@@ -80,21 +80,24 @@
                 articleNumber: 1,
                 title: "เราทุกคนเกิดมาเป็นอิสระและเท่าเทียมกัน",
                 description: "มนุษย์ทุกคนเกิดมามีอิสระและเสมอภาคกันในศักดิ์ศรีและสิทธิ ต่างในตนมีเหตุผลและมโนธรรม และควรปฏิบัติต่อกันด้วยเจตนารมณ์แห่งภราดรภาพ",
-                caseStudy: "กรณีที่นักเรียนกลุ่มหนึ่งถูกกีดกันไม่ให้เข้าร่วมกิจกรรมของโรงเรียนเพียงเพราะพวกเขามีความหลากหลายทางเพศ (LGBTQ+) เป็นการละเมิดสิทธิขั้นพื้นฐานแห่งความเท่าเทียม"
+                caseStudy: "กรณีที่นักเรียนกลุ่มหนึ่งถูกกีดกันไม่ให้เข้าร่วมกิจกรรมของโรงเรียนเพียงเพราะพวกเขามีความหลากหลายทางเพศ (LGBTQ+) เป็นการละเมิดสิทธิขั้นพื้นฐานแห่งความเท่าเทียม",
+                imageUrl: "https://i.pinimg.com/736x/2b/3f/c7/2b3fc73ad104f9c661830631d3a5dd59.jpg"
             },
             {
                 id: 2,
                 articleNumber: 2,
                 title: "สิทธิความเสมอภาคและไม่เลือกปฏิบัติ",
                 description: "ทุกคนย่อมมีสิทธิและอิสรภาพโดยปราศจากการแบ่งแยกใดๆ เช่น เชื้อชาติ สีผิว เพศ ภาษา ศาสนา ความคิดเห็นทางการเมือง เผ่าพันธุ์ หรือฐานะทางสังคม",
-                caseStudy: "นายสมชายถูกปฏิเสธการเข้าทำงานในบริษัทแห่งหนึ่ง โดยฝ่ายบุคคลแจ้งเหตุผลว่าเขามาจากภูมิภาคที่บริษัทมีอคติด้วย ถือเป็นการเลือกปฏิบัติอย่างชัดเจน"
+                caseStudy: "นายสมชายถูกปฏิเสธการเข้าทำงานในบริษัทแห่งหนึ่ง โดยฝ่ายบุคคลแจ้งเหตุผลว่าเขามาจากภูมิภาคที่บริษัทมีอคติด้วย ถือเป็นการเลือกปฏิบัติอย่างชัดเจน",
+                imageUrl: "https://i.pinimg.com/736x/8f/b1/52/8fb152f1019e16ca7c5949a8d666d602.jpg"
             },
             {
                 id: 3,
                 articleNumber: 3,
                 title: "สิทธิในการมีชีวิต",
                 description: "ทุกคนมีสิทธิในการมีชีวิต เสรีภาพ และความมั่นคงแห่งบุคคล",
-                caseStudy: "การวิสามัญฆาตกรรมผู้ต้องสงสัยโดยเจ้าหน้าที่รัฐโดยไม่ผ่านกระบวนการยุติธรรม เป็นการพรากสิทธิในการมีชีวิตซึ่งเป็นสิทธิที่ไม่อาจละเมิดได้"
+                caseStudy: "การวิสามัญฆาตกรรมผู้ต้องสงสัยโดยเจ้าหน้าที่รัฐโดยไม่ผ่านกระบวนการยุติธรรม เป็นการพรากสิทธิในการมีชีวิตซึ่งเป็นสิทธิที่ไม่อาจละเมิดได้",
+                imageUrl: "https://i.pinimg.com/736x/8b/d1/cf/8bd1cf5c3c2e78ee7d62a099768f1745.jpg"
             },
             {
                 id: 4,
@@ -200,7 +203,7 @@
 
         const SparklesIcon = () => (
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1-1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
                 <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
             </svg>
         );
@@ -219,6 +222,35 @@
         );
 
         const ArticleCard = ({ article, onClick }) => {
+            if (article.imageUrl) {
+                return (
+                    <div 
+                        onClick={() => onClick(article)}
+                        className="cursor-pointer flex flex-col h-full group items-center justify-start transition-all duration-300"
+                    >
+                        {/* ตัดพื้นหลังสีๆ และกรอบออก เหลือแค่พื้นที่วางรูปภาพ */}
+                        <div className="relative w-full h-56 sm:h-64 flex items-center justify-center mb-3">
+                            <img 
+                                src={encodeURI(article.imageUrl)} 
+                                alt={article.title} 
+                                /* เพิ่ม mix-blend-multiply เพื่อลบพื้นหลังสีขาว และเอาเงาสี่เหลี่ยมออก */
+                                className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-all duration-500"
+                            />
+                            {/* ป้ายบอกเลขข้อ เล็กๆ มุมซ้ายบน */}
+                            <div className="absolute top-2 left-2">
+                                <span className="bg-navy/80 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
+                                    ข้อที่ {article.articleNumber}
+                                </span>
+                            </div>
+                        </div>
+                        {/* ชื่อสิทธิข้อที่ 1 */}
+                        <h3 className="text-lg font-bold text-navy text-center px-2 group-hover:text-accent transition-colors duration-300">
+                            {article.title}
+                        </h3>
+                    </div>
+                );
+            }
+
             return (
                 <div 
                     onClick={() => onClick(article)}
@@ -527,7 +559,6 @@
                     {/* Main Content Area */}
                     <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
                         
-                        {}
                         <SituationAnalyzer udhrData={udhrData} onArticleClick={setSelectedArticle} />
 
                         {/* Search Results Summary */}
