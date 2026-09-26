@@ -301,7 +301,10 @@
                 setResult(null);
 
                 try {
-                    const apiKey = "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"; // กรุณาใช้งานด้วยความระมัดระวังเกี่ยวกับ API Key
+                    // 1. นำ API Key อันใหม่ของคุณมาใส่ตรงนี้
+                    const apiKey = "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"; 
+                    
+                    // 2. ใช้ URL ผ่าน CORS Proxy เพื่อแก้ปัญหาที่เบราว์เซอร์บล็อกการเชื่อมต่อ
                     const apiUrl = "https://corsproxy.io/?https://api.groq.com/openai/v1/chat/completions";
 
                     const payload = {
@@ -333,6 +336,14 @@
                         body: JSON.stringify(payload)
                     });
 
+                    // ตรวจสอบ Error ถ้าระบบปฏิเสธการเชื่อมต่อ
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            throw new Error("API Key ถูกบล็อกหรือปลอมแปลง (กรุณาใช้ Key ใหม่และอย่าเปิดเป็น Public)");
+                        }
+                        throw new Error(`เซิร์ฟเวอร์ขัดข้อง (รหัส: ${response.status})`);
+                    }
+
                     const apiResult = await response.json();
                     
                     if (apiResult.choices && apiResult.choices.length > 0) {
@@ -344,7 +355,8 @@
                     }
                 } catch (err) {
                     console.error("Analysis error:", err);
-                    setError('ขออภัยครับ เกิดข้อผิดพลาดในการเชื่อมต่อ ลองส่งข้อความมาใหม่นะครับ');
+                    // แสดง Error บนหน้าเว็บเลยจะได้รู้ว่าพังเพราะอะไร
+                    setError(`พบปัญหา: ${err.message}`);
                 } finally {
                     setIsAnalyzing(false);
                 }
